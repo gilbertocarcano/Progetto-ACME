@@ -256,12 +256,12 @@ namespace AcmeUI.ViewModels
         {
             // Geometria del tuo solenoide
             double R = 0.07;      // raggio solenoide [m]
-            double L = 0.14;      // lunghezza solenoide [m]
+            double L = 0.1;      // lunghezza solenoide [m]
             double r_laterale = 0.05; // raggio sensore laterale [m]
             double z = 0.0;       // piano centrale
 
             // Parametri solenoide
-            int N = 10000;         // numero spire (non importa nel rapporto)
+            int N = 1000;         // numero spire (non importa nel rapporto)
             double n = N / L;     // densità spire [1/m]
 
             // Risoluzione integrazione
