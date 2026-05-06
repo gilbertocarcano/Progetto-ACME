@@ -1,0 +1,240 @@
+<Page
+    x:Class="AcmeUI.Views.SettingsPages.ArduinoSettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:AcmeUI.ViewModels"
+    xmlns:conv="using:AcmeUI.Converters"
+    xmlns:models="using:AcmeUI.Models">
+
+    <Page.Resources>
+        <conv:FloatConverter x:Key="FloatConverter" />
+    </Page.Resources>
+
+    <ScrollViewer Padding="20">
+
+        <StackPanel Spacing="16">
+
+            <!-- StepsPerUnit -->
+            <StackPanel>
+                <TextBlock Text="Numero passi per millimetro" />
+                <TextBox Text="{Binding StepsPerUnit, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <!-- StepLRSize -->
+            <StackPanel>
+                <TextBlock Text="Passo Low Resolution [mm])" />
+                <TextBox Text="{Binding StepLRSize, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <!-- StepHRSize -->
+            <StackPanel>
+                <TextBlock Text="Passo High Resolution [mm]" />
+                <TextBox Text="{Binding StepHRSize, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <!-- StartPosition -->
+            <StackPanel>
+                <TextBlock Text="Posizione iniziale rispetto home [mm]" />
+                <TextBox Text="{Binding StartPosition, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <!-- EndPosition -->
+            <StackPanel>
+                <TextBlock Text="Posizione finale rispetto home [mm]" />
+                <TextBox Text="{Binding EndPosition, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <StackPanel>
+                <TextBlock Text="Velocità Homing [mm/sec]" />
+                <TextBox Text="{Binding HomingSpeed, Mode=TwoWay}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <StackPanel>
+                <TextBlock Text="Velocità Normale [mm/sec]" />
+                <TextBox Text="{Binding NormalSpeed, Mode=TwoWay}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <StackPanel>
+                <TextBlock Text="Delay prima della singola lettura [ms]" />
+                <TextBox Text="{Binding DelayBeforeRead, Mode=TwoWay}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <StackPanel>
+                <TextBlock Text="Durata ciclo singola lettura [ms]" />
+                <TextBox Text="{Binding DelayAfterRead, Mode=TwoWay}"
+                         InputScope="Number" />
+            </StackPanel>
+
+            <!-- Tempo totale di scansione -->
+            <StackPanel>
+                <TextBlock Text="Tempo totale di scansione [sec]" />
+                <TextBox Text="{Binding TotalScanTime}"
+                    IsReadOnly="True"
+                    FontWeight="Bold"
+                    InputScope="Number" />
+            </StackPanel>
+
+            <!-- ============================= -->
+            <!-- 1) HR RANGES (ORA PRIMA)      -->
+            <!-- ============================= -->
+
+            <StackPanel Spacing="12">
+
+                <TextBlock Text="Intervalli High Resolution"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Margin="0,20,0,10"/>
+
+                <ItemsControl ItemsSource="{Binding HRRanges}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:HRRange">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+
+                                <TextBox Width="80"
+                                         Text="{Binding Start, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                         InputScope="Number"/>
+
+                                <TextBox Width="80"
+                                         Text="{Binding End, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                         InputScope="Number"/>
+
+                                <Button Content="X" Click="OnRemoveHRRangeClick" />
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+                    <Button Content="Aggiungi Range"
+                            Command="{Binding AddHRRangeCommand}" />
+                </StackPanel>
+
+            </StackPanel>
+
+            <Rectangle Height="1"
+                Fill="#33000000"
+                Margin="0,20,0,20"/>
+
+            <!-- ===================================== -->
+            <!-- 2) CARATTERISTICHE SENSORI HALL (DOPO) -->
+            <!-- ===================================== -->
+
+            <StackPanel Spacing="16" Margin="0,0,0,0">
+
+                <TextBlock Text="Caratteristiche sensori Hall"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,10"/>
+
+                <Grid ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- COLONNA SINISTRA: Vref -->
+                    <StackPanel Grid.Column="0" Spacing="12">
+
+                        <StackPanel>
+                            <TextBlock Text="Tensione di offset sensore sinistro [V]" />
+                            <TextBox Text="{Binding VrefSx, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Tensione di offset sensore destro [V]" />
+                            <TextBox Text="{Binding VrefDx, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Tensione di offset sensore superiore [V]" />
+                            <TextBox Text="{Binding VrefUp, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Tensione di offset sensore inferiore [V]" />
+                            <TextBox Text="{Binding VrefDw, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Tensione di offset sensore centrale [V]" />
+                            <TextBox Text="{Binding VrefCenter, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <!-- COLONNA DESTRA: Sensitivity -->
+                    <StackPanel Grid.Column="1" Spacing="12">
+
+                        <StackPanel>
+                            <TextBlock Text="Sensibilità sensore sinistro [mV/G]" />
+                            <TextBox Text="{Binding SensitivitySx, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Sensibilità sensore destro [mV/G]" />
+                            <TextBox Text="{Binding SensitivityDx, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Sensibilità sensore superiore [mV/G]" />
+                            <TextBox Text="{Binding SensitivityUp, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Sensibilità sensore inferiore [mV/G]" />
+                            <TextBox Text="{Binding SensitivityDw, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Sensibilità sensore centrale [mV/G]" />
+                            <TextBox Text="{Binding SensitivityCenter, Mode=TwoWay, Converter={StaticResource FloatConverter}}"
+                                     InputScope="Number" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- Pulsante Calibrazione -->
+                <StackPanel Margin="0,10,0,0">
+                    <Button Content="Calibrazione"
+                            Click="OnCalibrateClick"
+                            HorizontalAlignment="Left"
+                            Width="150"/>
+                </StackPanel>
+
+            </StackPanel>
+
+            <Rectangle Height="1"
+                Fill="#33000000"
+                Margin="0,20,0,20"/>
+
+            <!-- Pulsanti -->
+            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,20,0,0">
+                <Button Content="Ricarica" Command="{Binding LoadFromArduinoCommand}" />
+                <Button Content="Salva" Click="OnSaveClick" />
+            </StackPanel>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</Page>

@@ -1,0 +1,34 @@
+<Page
+    x:Class="AcmeUI.Views.SettingsPages.LocalSettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:AcmeUI.ViewModels">
+
+    <Page.DataContext>
+        <vm:LocalSettingsViewModel />
+    </Page.DataContext>
+
+    <StackPanel Padding="20" Spacing="16">
+
+        <TextBlock Text="Impostazioni Seriale"
+                   FontSize="24"
+                   FontWeight="SemiBold" />
+
+        <!-- Porta COM -->
+        <ComboBox Header="Porta Seriale"
+                  ItemsSource="{Binding AvailablePorts}"
+                  SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
+                  PlaceholderText="Seleziona una porta" />
+
+        <!-- Baud rate -->
+        <ComboBox Header="Velocità (baud)"
+                  ItemsSource="{Binding BaudRates}"
+                  SelectedItem="{Binding BaudRate, Mode=TwoWay}" />
+
+        <!-- Salva -->
+        <Button Content="Salva impostazioni"
+                Command="{Binding SaveSettingsCommand}"
+                HorizontalAlignment="Left" />
+
+    </StackPanel>
+</Page>
