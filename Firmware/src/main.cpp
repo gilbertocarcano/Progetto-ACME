@@ -3,7 +3,6 @@
 #include "SerialApiClass.h"
 #include "ConfigurationClass.h"
 
-
 void setup() {
   analogReadResolution(12);
   Configuration.load();
