@@ -28,6 +28,13 @@ void MagneticFluxReaderClass::begin(uint8_t pinLeft, uint8_t pinRight, uint8_t p
     pinMode(_pinDown,   INPUT);
     pinMode(_pinCenter, INPUT);
 
+    // Letture a vuoto per stabilizzare gli ADC
+    readAnalogTrimmed(_pinLeft, 100, 10, 100);
+    readAnalogTrimmed(_pinRight, 100, 10, 100);
+    readAnalogTrimmed(_pinUp, 100, 10, 100);
+    readAnalogTrimmed(_pinDown, 100, 10, 100);
+    readAnalogTrimmed(_pinCenter, 100, 10, 100);
+
     _initialized = true;
 }
 
@@ -69,6 +76,9 @@ float MagneticFluxReaderClass::readSensorVref(uint8_t pin, int readingTimeMs) {
     int nSamples = readingTimeMs*10;
     int raw = readAnalogTrimmed(pin, nSamples, 10, 100); // 10% cut, 100 µs delay 
     float vout = (raw / 4095.0) * Vref;
+
+    // TEST: zero-offset da datasheet
+    // vout = 2.5f;
     
     return vout;
 }
@@ -93,6 +103,12 @@ int MagneticFluxReaderClass::readAnalogTrimmed(uint8_t pin, int nSamples, int cu
     if (nSamples > 5000) nSamples = 5000;
 
     // Acquisizione
+
+    // TEST: Acquisizione singolo valore
+    // return analogRead(pin);    
+    
+    // Scarta il primo valore letto;
+    analogRead(pin);
     for (int i = 0; i < nSamples; i++) {
         samples[i] = analogRead(pin);
         delayMicroseconds(delayMicros);
@@ -104,6 +120,9 @@ int MagneticFluxReaderClass::readAnalogTrimmed(uint8_t pin, int nSamples, int cu
     // Calcolo media troncata
     int cut = (nSamples * cutPercent) / 100;
     if (cut * 2 >= nSamples) cut = nSamples / 4; // sicurezza
+
+    // TEST: Acquisizione con media semplice
+     cut = 0;
 
     long sum = 0;
     int count = 0;

@@ -59,6 +59,7 @@ void MotionControllerClass::update() {
 
     if (isAlarmActive()) {
         if (_state != MachineState::ALARM) {
+            abort();
             stateChange(MachineState::ALARM);  
             _lastAlarmTime = millis();      
         }
@@ -401,20 +402,17 @@ void MotionControllerClass::startCalibration() {
     int delayBeforeMs = Configuration.getDelayBeforeRead();
     int delayAfterMs = Configuration.getDelayAfterRead();
 
-    enqueueMove(start, TargetType::START);
-    enqueueWait(delayBeforeMs);
-    enqueueCalibrationPaused(start);
-    //enqueueWait(delayAfterMs);
+    //enqueueMove(start, TargetType::START);
+    //enqueueWait(delayBeforeMs);
+    enqueueCalibrationPaused(start);    
 
-    enqueueMove(center, TargetType::CENTER);
-    enqueueWait(delayBeforeMs);
-    enqueueCalibrationPaused(center);
-    //enqueueWait(delayAfterMs);
+    // enqueueMove(center, TargetType::CENTER);
+    // enqueueWait(delayBeforeMs);
+    // enqueueCalibrationPaused(center);    
 
-    enqueueMove(end, TargetType::END);
-    enqueueWait(delayBeforeMs);
-    enqueueCalibrationPaused(end);
-    //enqueueWait(delayAfterMs);
+    // enqueueMove(end, TargetType::END);
+    // enqueueWait(delayBeforeMs);
+    // enqueueCalibrationPaused(end);
 
     MotionCommand done;
     done.type = MotionCommandType::CALIBRATION_COMPLETED;
